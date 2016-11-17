@@ -20,6 +20,8 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
     var captureDevice:AVCaptureDevice? = nil
     var captureMovieFileOutput:AVCaptureMovieFileOutput? = nil
     var captureVideoPreviewLayer:AVCaptureVideoPreviewLayer? = nil
+    
+    var fileUrl:URL? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,6 +96,19 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
         return devices?.first
     }
     
+    func _getFileSize(_ path:String) -> Int {
+        var fileSize = 0
+        do {
+            let outputFileAttributes = try FileManager().attributesOfItem(atPath: path) as NSDictionary?
+            if let attr = outputFileAttributes {
+                fileSize = Int(attr.fileSize())
+            }
+        } catch {
+            print("_getFileSize error")
+        }
+        return fileSize
+    }
+    
     @IBAction func record(_ sender: Any) {
         let btn = sender as! UIButton
         btn.isSelected = !btn.isSelected
@@ -102,8 +117,8 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
              // 预览图层和视频方向保持一致
             captureConnection?.videoOrientation = (self.captureVideoPreviewLayer?.connection.videoOrientation)!
             let outputFielPath = NSTemporaryDirectory().appending(VIDEO_FOLDER)
-            let fileUrl = NSURL.fileURL(withPath: outputFielPath)
-            self.captureMovieFileOutput?.startRecording(toOutputFileURL: fileUrl, recordingDelegate: self)
+            self.fileUrl = NSURL.fileURL(withPath: outputFielPath)
+            self.captureMovieFileOutput?.startRecording(toOutputFileURL: self.fileUrl, recordingDelegate: self)
         } else {
             self.captureMovieFileOutput?.stopRecording()
 //            self.captureSession?.stopRunning()
@@ -115,6 +130,7 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
     }
     
     func capture(_ captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAt outputFileURL: URL!, fromConnections connections: [Any]!, error: Error!) {
+        print ("File Size:", self._getFileSize((outputFileURL?.path)!))
         print("---- 录制结束 ----")
     }
     
