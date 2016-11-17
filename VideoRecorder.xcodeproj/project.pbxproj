@@ -12,6 +12,8 @@
 		CB36365D1DDD5117000B319A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB36365B1DDD5117000B319A /* Main.storyboard */; };
 		CB36365F1DDD5117000B319A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB36365E1DDD5117000B319A /* Assets.xcassets */; };
 		CB3636621DDD5117000B319A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB3636601DDD5117000B319A /* LaunchScreen.storyboard */; };
+		CB36366B1DDD58AC000B319A /* ShootVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3636691DDD58AC000B319A /* ShootVideoVC.swift */; };
+		CB36366C1DDD58AC000B319A /* ShootVideoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB36366A1DDD58AC000B319A /* ShootVideoVC.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		CB36365E1DDD5117000B319A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CB3636611DDD5117000B319A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB3636631DDD5117000B319A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB3636691DDD58AC000B319A /* ShootVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShootVideoVC.swift; sourceTree = "<group>"; };
+		CB36366A1DDD58AC000B319A /* ShootVideoVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShootVideoVC.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,8 @@
 				CB36365E1DDD5117000B319A /* Assets.xcassets */,
 				CB3636601DDD5117000B319A /* LaunchScreen.storyboard */,
 				CB3636631DDD5117000B319A /* Info.plist */,
+				CB3636691DDD58AC000B319A /* ShootVideoVC.swift */,
+				CB36366A1DDD58AC000B319A /* ShootVideoVC.xib */,
 			);
 			path = VideoRecorder;
 			sourceTree = "<group>";
@@ -126,6 +132,7 @@
 			files = (
 				CB3636621DDD5117000B319A /* LaunchScreen.storyboard in Resources */,
 				CB36365F1DDD5117000B319A /* Assets.xcassets in Resources */,
+				CB36366C1DDD58AC000B319A /* ShootVideoVC.xib in Resources */,
 				CB36365D1DDD5117000B319A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -139,6 +146,7 @@
 			files = (
 				CB36365A1DDD5117000B319A /* ViewController.swift in Sources */,
 				CB3636581DDD5117000B319A /* AppDelegate.swift in Sources */,
+				CB36366B1DDD58AC000B319A /* ShootVideoVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
