@@ -11,7 +11,7 @@ import AVFoundation
 import AssetsLibrary
 
 let TIMER_INTERVAL = 0.05
-let VIDEO_FOLDER = "videoFolder"
+let VIDEO_FOLDER = "videoFolder.mov"
 
 class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
     @IBOutlet weak var preView: UIView!
@@ -84,6 +84,39 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
         layer.addSublayer(self.captureVideoPreviewLayer!)
     }
     
+    func compressVideo(_ url:URL) {
+        let start = NSDate()
+        // 通过文件的 url 获取到这个文件的资源
+        let avAsset = AVURLAsset(url: url)
+        // 用 AVAssetExportSession 这个类来导出资源中的属性
+        let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: avAsset)
+        if compatiblePresets.contains(AVAssetExportPresetMediumQuality) {
+            // 通过资源（AVURLAsset）来定义 AVAssetExportSession
+            let exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetMediumQuality)
+            // 设置导出文件的存放路径
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
+            let filename = "output-\(formatter.string(from: Date())).mp4"
+            let outputFielPath = NSTemporaryDirectory().appending(filename)
+            let saveUrl = NSURL.fileURL(withPath: outputFielPath)
+            exportSession?.outputURL = saveUrl
+            // 是否对网络进行优化
+            exportSession?.shouldOptimizeForNetworkUse = true
+            // 转换成MP4格式
+            exportSession?.outputFileType = AVFileTypeMPEG4
+            // 开始导出,导出后执行完成的block
+            exportSession?.exportAsynchronously(completionHandler: {
+                if exportSession?.status == AVAssetExportSessionStatus.completed {
+                    let time = -start.timeIntervalSinceNow
+                    print(time)
+                    print ("File Size: \(self._getFileSize(saveUrl.path))")
+                } else {
+                    print("Compress Error: \(exportSession?.error)")
+                }
+            })
+        }
+    }
+    
     func _getVideoDeviceWithPosition(_ position:AVCaptureDevicePosition) -> AVCaptureDevice! {
         let deviceTypes = [AVCaptureDeviceType.builtInWideAngleCamera, AVCaptureDeviceType.builtInTelephotoCamera]
         let devices = AVCaptureDeviceDiscoverySession.init(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: position).devices
@@ -104,7 +137,7 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
                 fileSize = Int(attr.fileSize())
             }
         } catch {
-            print("_getFileSize error")
+            print("_getFileSize \(error)")
         }
         return fileSize
     }
@@ -131,6 +164,7 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
     
     func capture(_ captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAt outputFileURL: URL!, fromConnections connections: [Any]!, error: Error!) {
         print ("File Size:", self._getFileSize((outputFileURL?.path)!))
+        self.compressVideo(outputFileURL)
         print("---- 录制结束 ----")
     }
     
