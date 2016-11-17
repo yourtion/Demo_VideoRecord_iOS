@@ -25,49 +25,56 @@ class ShootVideoVC: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.setupCapture()
+        self.captureSession?.startRunning()
     }
     
     func setupCapture() {
+        // 创建会话 (AVCaptureSession) 对象
         self.captureSession = AVCaptureSession()
-        self.captureMovieFileOutput = AVCaptureMovieFileOutput()
+        // 设置会话的 sessionPreset 属性
         if (self.captureSession?.canSetSessionPreset(AVCaptureSessionPreset640x480))! {
             self.captureSession?.canSetSessionPreset(AVCaptureSessionPreset640x480)
         }
-        guard let videoCaptureDevice = self._getVideoDeviceWithPosition(.back) else {
+        // 获取摄像头输入设备， 创建 AVCaptureDeviceInput 对象
+        guard let videoDevice = self._getVideoDeviceWithPosition(.back) else {
             print("---- 取得摄像头时出现问题----")
             return
         }
-        guard let audioCaptureDevice = self._getAudioDevice() else {
+        // 添加一个音频输入设备
+        guard let audioDevice = self._getAudioDevice() else {
             print("---- 取得麦克风时出现问题----")
             return
         }
-        self.captureDevice = videoCaptureDevice
-        var captureVideoDeviceInput:AVCaptureDeviceInput
-        var captureAudioDeviceInput:AVCaptureDeviceInput
+        self.captureDevice = videoDevice
+        var videoInput:AVCaptureDeviceInput
+        var audioInput:AVCaptureDeviceInput
         do {
-            captureVideoDeviceInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
-            captureAudioDeviceInput = try AVCaptureDeviceInput(device: audioCaptureDevice)
+            // 视频输入对象
+            videoInput = try AVCaptureDeviceInput(device: videoDevice)
+            //  音频输入对象
+            audioInput = try AVCaptureDeviceInput(device: audioDevice)
         } catch {
             return
         }
-        if (self.captureSession?.canAddInput(captureVideoDeviceInput))! {
-            self.captureSession?.addInput(captureVideoDeviceInput)
+        if (self.captureSession?.canAddInput(videoInput))! {
+            // 将视频输入对象添加到会话 (AVCaptureSession) 中
+            self.captureSession?.addInput(videoInput)
         }
-        if (self.captureSession?.canAddInput(captureAudioDeviceInput))! {
-            self.captureSession?.addInput(captureAudioDeviceInput)
-            let captureConnection = self.captureMovieFileOutput?.connection(withMediaType: AVMediaTypeVideo)
-            if (captureConnection?.isVideoStabilizationSupported)! {
-                captureConnection?.preferredVideoStabilizationMode = .auto
-            }
+        if (self.captureSession?.canAddInput(audioInput))! {
+            // 将音频输入对象添加到会话 (AVCaptureSession) 中
+            self.captureSession?.addInput(audioInput)
         }
-        
+        // 通过会话 (AVCaptureSession) 创建预览层
         self.captureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
+        // 显示在视图表面的图层
         let layer = preView.layer
         layer.masksToBounds = true
         self.captureVideoPreviewLayer?.frame = layer.bounds
         self.captureVideoPreviewLayer?.masksToBounds = true
         self.captureVideoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
         layer.addSublayer(self.captureVideoPreviewLayer!)
+        // 拍摄视频输出对象
+        self.captureMovieFileOutput = AVCaptureMovieFileOutput()
     }
     
     func _getVideoDeviceWithPosition(_ position:AVCaptureDevicePosition) -> AVCaptureDevice! {
@@ -78,7 +85,7 @@ class ShootVideoVC: UIViewController {
     
     func _getAudioDevice() -> AVCaptureDevice! {
         let deviceTypes = [AVCaptureDeviceType.builtInMicrophone]
-        let devices = AVCaptureDeviceDiscoverySession.init(deviceTypes: deviceTypes, mediaType: AVMediaTypeVideo, position: .unspecified).devices
+        let devices = AVCaptureDeviceDiscoverySession.init(deviceTypes: deviceTypes, mediaType: AVMediaTypeAudio, position: .unspecified).devices
         return devices?.first
     }
     
