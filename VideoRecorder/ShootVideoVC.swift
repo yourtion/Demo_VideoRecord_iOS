@@ -13,7 +13,7 @@ import AssetsLibrary
 let TIMER_INTERVAL = 0.05
 let VIDEO_FOLDER = "videoFolder"
 
-class ShootVideoVC: UIViewController {
+class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
     @IBOutlet weak var preView: UIView!
     
     var captureSession:AVCaptureSession? = nil
@@ -64,6 +64,13 @@ class ShootVideoVC: UIViewController {
             // 将音频输入对象添加到会话 (AVCaptureSession) 中
             self.captureSession?.addInput(audioInput)
         }
+        // 拍摄视频输出对象
+        self.captureMovieFileOutput = AVCaptureMovieFileOutput()
+        if (self.captureSession?.canAddOutput(self.captureMovieFileOutput))! {
+            // 将设备输出添加到会话中
+            self.captureSession?.addOutput(self.captureMovieFileOutput)
+        }
+        
         // 通过会话 (AVCaptureSession) 创建预览层
         self.captureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
         // 显示在视图表面的图层
@@ -73,8 +80,6 @@ class ShootVideoVC: UIViewController {
         self.captureVideoPreviewLayer?.masksToBounds = true
         self.captureVideoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
         layer.addSublayer(self.captureVideoPreviewLayer!)
-        // 拍摄视频输出对象
-        self.captureMovieFileOutput = AVCaptureMovieFileOutput()
     }
     
     func _getVideoDeviceWithPosition(_ position:AVCaptureDevicePosition) -> AVCaptureDevice! {
@@ -90,6 +95,27 @@ class ShootVideoVC: UIViewController {
     }
     
     @IBAction func record(_ sender: Any) {
+        let btn = sender as! UIButton
+        btn.isSelected = !btn.isSelected
+        if btn.isSelected {
+            let captureConnection = self.captureMovieFileOutput?.connection(withMediaType: AVMediaTypeVideo)
+             // 预览图层和视频方向保持一致
+            captureConnection?.videoOrientation = (self.captureVideoPreviewLayer?.connection.videoOrientation)!
+            let outputFielPath = NSTemporaryDirectory().appending(VIDEO_FOLDER)
+            let fileUrl = NSURL.fileURL(withPath: outputFielPath)
+            self.captureMovieFileOutput?.startRecording(toOutputFileURL: fileUrl, recordingDelegate: self)
+        } else {
+            self.captureMovieFileOutput?.stopRecording()
+//            self.captureSession?.stopRunning()
+        }
+    }
+    
+    func capture(_ captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAt fileURL: URL!, fromConnections connections: [Any]!) {
+        print("---- 开始录制 ----")
+    }
+    
+    func capture(_ captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAt outputFileURL: URL!, fromConnections connections: [Any]!, error: Error!) {
+        print("---- 录制结束 ----")
     }
     
     override func didReceiveMemoryWarning() {
