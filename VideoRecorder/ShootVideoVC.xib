@@ -38,6 +38,28 @@
                         <action selector="record:" destination="-1" eventType="touchUpInside" id="RuH-Tp-tbz"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bx-k7-uFb">
+                    <rect key="frame" x="16" y="617" width="64" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="Fub-ca-ZyS"/>
+                        <constraint firstAttribute="width" constant="64" id="Z33-4V-AnU"/>
+                    </constraints>
+                    <state key="normal" title="PlayOrg"/>
+                    <connections>
+                        <action selector="playOrg:" destination="-1" eventType="touchUpInside" id="1gE-aR-ek5"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fOW-mL-cSR">
+                    <rect key="frame" x="295" y="617" width="64" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="6di-Ri-9V6"/>
+                        <constraint firstAttribute="width" constant="64" id="fKe-e8-rz0"/>
+                    </constraints>
+                    <state key="normal" title="PlayCom"/>
+                    <connections>
+                        <action selector="playCom:" destination="-1" eventType="touchUpInside" id="Vm2-GD-lp1"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -45,6 +67,10 @@
                 <constraint firstAttribute="bottom" secondItem="wrK-rb-KH9" secondAttribute="bottom" constant="20" id="ADo-f0-Qc6"/>
                 <constraint firstItem="sSE-oE-GM9" firstAttribute="centerX" secondItem="wrK-rb-KH9" secondAttribute="centerX" id="Dqc-Uf-pvm"/>
                 <constraint firstItem="sSE-oE-GM9" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="KLY-4G-uPv"/>
+                <constraint firstAttribute="bottom" secondItem="fOW-mL-cSR" secondAttribute="bottom" constant="20" id="jIW-0R-FKW"/>
+                <constraint firstItem="4bx-k7-uFb" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="nsH-xY-zIV"/>
+                <constraint firstAttribute="trailing" secondItem="fOW-mL-cSR" secondAttribute="trailing" constant="16" id="pAn-tL-QkZ"/>
+                <constraint firstAttribute="bottom" secondItem="4bx-k7-uFb" secondAttribute="bottom" constant="20" id="pc3-Bu-hlp"/>
             </constraints>
             <point key="canvasLocation" x="93.5" y="53.5"/>
         </view>

@@ -22,6 +22,7 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
     var captureVideoPreviewLayer:AVCaptureVideoPreviewLayer? = nil
     
     var fileUrl:URL? = nil
+    var finalUrl:URL? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,6 +100,7 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
             let filename = "output-\(formatter.string(from: Date())).mp4"
             let outputFielPath = NSTemporaryDirectory().appending(filename)
             let saveUrl = NSURL.fileURL(withPath: outputFielPath)
+            self.finalUrl = saveUrl
             exportSession?.outputURL = saveUrl
             // 是否对网络进行优化
             exportSession?.shouldOptimizeForNetworkUse = true
@@ -156,6 +158,17 @@ class ShootVideoVC: UIViewController,AVCaptureFileOutputRecordingDelegate {
             self.captureMovieFileOutput?.stopRecording()
 //            self.captureSession?.stopRunning()
         }
+    }
+    @IBAction func playOrg(_ sender: Any) {
+        let playVC = PlayVideoVC(nibName: "PlayVideoVC", bundle: nil)
+        playVC.videoUrl = self.fileUrl
+        self.present(playVC, animated: true, completion: nil)
+    }
+    
+    @IBAction func playCom(_ sender: Any) {
+        let playVC = PlayVideoVC(nibName: "PlayVideoVC", bundle: nil)
+        playVC.videoUrl = self.finalUrl
+        self.present(playVC, animated: true, completion: nil)
     }
     
     func capture(_ captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAt fileURL: URL!, fromConnections connections: [Any]!) {

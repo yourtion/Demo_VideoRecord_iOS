@@ -7,29 +7,37 @@
 //
 
 import UIKit
+import AVFoundation
 
 class PlayVideoVC: UIViewController {
-
+    
+    open var videoUrl:URL!
+    
+    var player: AVPlayer? = nil
+    var playerLayer: AVPlayerLayer? = nil
+    var playerItem: AVPlayerItem? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+        guard (videoUrl) != nil else {
+            return
+        }
+        let movieAsset = AVURLAsset(url: videoUrl)
+        self.playerItem = AVPlayerItem(asset: movieAsset)
+        self.player = AVPlayer(playerItem: self.playerItem)
+        
+        self.playerLayer = AVPlayerLayer(player: self.player)
+        self.playerLayer?.frame = self.view.bounds
+        self.playerLayer?.videoGravity = AVLayerVideoGravityResizeAspect
+        self.view.layer.addSublayer(self.playerLayer!)
+        
+        self.player?.play()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
