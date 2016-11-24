@@ -16,6 +16,7 @@ class PlayVideoVC: UIViewController {
     var player: AVPlayer? = nil
     var playerLayer: AVPlayerLayer? = nil
     var playerItem: AVPlayerItem? = nil
+    var playing = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +33,27 @@ class PlayVideoVC: UIViewController {
         self.playerLayer?.videoGravity = AVLayerVideoGravityResizeAspect
         self.view.layer.addSublayer(self.playerLayer!)
         
+        let playTap = UITapGestureRecognizer(target: self, action: #selector(playOrPause))
+        self.view.addGestureRecognizer(playTap)
+        
+        let returnTap = UILongPressGestureRecognizer(target: self, action: #selector(goBack))
+        self.view.addGestureRecognizer(returnTap)
+        
         self.player?.play()
+    }
+    
+    func goBack() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func playOrPause() {
+        if self.playing {
+            self.player?.pause()
+            self.playing = false
+        } else {
+            self.player?.play()
+            self.playing = true
+        }
     }
     
     override func didReceiveMemoryWarning() {
